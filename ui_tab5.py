@@ -1,9 +1,9 @@
 """
 ui_tab5.py
 Pestaña 5: Mapa interactivo con tkintermapview.
-- Muestra todos los aeropuertos como marcadores.
-- Clic en marcador → establece origen o destino.
-- Dibuja el camino mínimo como polilínea sobre el mapa.
+- El mapa arranca limpio (sin marcadores).
+- Solo muestra marcadores cuando se dibuja una ruta mínima.
+- Verde = origen, Rojo = destino, Amarillo = intermedios.
 """
 
 import tkinter as tk
@@ -35,11 +35,9 @@ class Tab5Mapa:
         self._map_ready = False
         self._build()
 
-    # ── Construcción de la UI ────────────────────────────────────────────
     def _build(self):
         parent = self.parent
 
-        # Panel izquierdo de controles
         left = tk.Frame(parent, bg=BG2, width=300)
         left.pack(side="left", fill="y")
         left.pack_propagate(False)
@@ -47,7 +45,6 @@ class Tab5Mapa:
         tk.Label(left, text="Mapa Interactivo", font=FONT_TITLE,
                  fg=ACCENT, bg=BG2).pack(pady=(14, 4))
 
-        # Modo de clic
         tk.Label(left, text="Al hacer clic en un marcador:",
                  font=FONT_MONO, fg="#888", bg=BG2).pack(anchor="w", padx=12)
 
@@ -63,7 +60,6 @@ class Tab5Mapa:
                        bg=BG2, fg=YELLOW, selectcolor=BG3,
                        activebackground=BG2, font=FONT_MONO).pack(anchor="w")
 
-        # Códigos seleccionados
         src_f = tk.Frame(left, bg=BG3, pady=4)
         src_f.pack(fill="x", padx=12, pady=(8, 2))
         tk.Label(src_f, text="ORIGEN:", font=FONT_MONO, fg=GREEN, bg=BG3).pack(side="left", padx=6)
@@ -76,7 +72,6 @@ class Tab5Mapa:
         tk.Label(dst_f, textvariable=self.dst_var,
                  font=("Courier New", 11, "bold"), fg=YELLOW, bg=BG3).pack(side="left")
 
-        # Botones
         tk.Button(left, text="🗺  Dibujar Ruta Mínima", font=FONT_MONO,
                   bg=ACCENT, fg="#0f1117", relief="flat", padx=10, pady=6,
                   cursor="hand2", command=self._draw_route).pack(fill="x", padx=12, pady=(10, 4))
@@ -89,7 +84,6 @@ class Tab5Mapa:
                                      bg=BG2, wraplength=270, justify="left")
         self.route_status.pack(pady=8, padx=12, anchor="w")
 
-        # Info del marcador clicado
         tk.Label(left, text="─" * 34, fg="#333", bg=BG2).pack()
         tk.Label(left, text="Aeropuerto seleccionado:", font=FONT_MONO,
                  fg="#888", bg=BG2).pack(anchor="w", padx=12, pady=(6, 2))
@@ -97,7 +91,6 @@ class Tab5Mapa:
                                  bg=BG2, wraplength=280, justify="left")
         self.info_lbl.pack(anchor="w", padx=12)
 
-        # Vértices del camino
         tk.Label(left, text="─" * 34, fg="#333", bg=BG2).pack(pady=(10, 0))
         tk.Label(left, text="Vértices del camino mínimo:", font=FONT_MONO,
                  fg="#888", bg=BG2).pack(anchor="w", padx=12, pady=(4, 2))
@@ -126,21 +119,17 @@ class Tab5Mapa:
         self.path_tree.pack(side="left", fill="both", expand=True)
         sc.pack(side="right", fill="y")
 
-        # Panel derecho — mapa
         right = tk.Frame(parent, bg="#111")
         right.pack(side="right", fill="both", expand=True)
 
-        # Label de carga visible mientras el mapa inicializa
         self.loading_lbl = tk.Label(right,
                                     text="🗺  Cargando mapa… (requiere conexión a internet)",
                                     font=("Courier New", 12), fg=ACCENT, bg="#111")
         self.loading_lbl.place(relx=0.5, rely=0.5, anchor="center")
 
-        # El mapa se crea después de que el frame tenga tamaño real
         right.after(800, lambda: self._init_map(right))
 
     def _init_map(self, container):
-        """Inicializa el widget del mapa una vez que el frame ya tiene dimensiones."""
         try:
             self.map_widget = tkintermapview.TkinterMapView(container, corner_radius=0)
             self.map_widget.pack(fill="both", expand=True)
@@ -149,40 +138,11 @@ class Tab5Mapa:
             self.map_widget.add_left_click_map_command(self._on_map_click)
             self._map_ready = True
             self.loading_lbl.destroy()
-            # Cargar marcadores en segundo plano
-            threading.Thread(target=self._load_markers, daemon=True).start()
         except Exception as e:
-            self.loading_lbl.config(
-                text=f"Error al cargar el mapa:\n{e}", fg=RED)
+            self.loading_lbl.config(text=f"Error al cargar el mapa:\n{e}", fg=RED)
 
-    # ── Marcadores ───────────────────────────────────────────────────────
-    def _load_markers(self):
-        airports = list(self.graph.airports.values())
-        batch_size = 150
-        for i in range(0, len(airports), batch_size):
-            batch = airports[i:i + batch_size]
-            self.parent.after(0, lambda b=batch: self._add_batch(b))
-
-    def _add_batch(self, batch):
-        if not self._map_ready:
-            return
-        for ap in batch:
-            code = ap["code"]
-            try:
-                marker = self.map_widget.set_marker(
-                    ap["lat"], ap["lon"],
-                    text=code,
-                    marker_color_circle="#4fc3f7",
-                    marker_color_outside="#1a3a4a",
-                    command=lambda m, c=code: self._on_marker_click(c),
-                )
-                self._markers[code] = marker
-            except Exception:
-                pass
-
-    # ── Eventos ──────────────────────────────────────────────────────────
     def _on_map_click(self, coords):
-        pass  # clic libre en mapa sin acción extra
+        pass
 
     def _on_marker_click(self, code):
         ap = self.graph.airports.get(code, {})
@@ -198,7 +158,6 @@ class Tab5Mapa:
         else:
             self.dst_var.set(code)
 
-    # ── Ruta ─────────────────────────────────────────────────────────────
     def _draw_route(self):
         src = self.src_var.get().strip().upper()
         dst = self.dst_var.get().strip().upper()
@@ -229,18 +188,23 @@ class Tab5Mapa:
         # Centrar el mapa en el punto medio del camino
         mid = coords[len(coords) // 2]
         self.map_widget.set_position(*mid)
-        self.map_widget.set_zoom(4)
+        zoom = 5 if len(path) <= 3 else (4 if len(path) <= 8 else 3)
+        self.map_widget.set_zoom(zoom)
 
         # Dibujar polilínea
         self._path_line = self.map_widget.set_path(coords, color="#ffd54f", width=3)
 
-        # Marcadores del camino
+        # Solo marcadores de los aeropuertos del camino (mapa limpio)
         for i, code in enumerate(path):
             ap = self.graph.airports[code]
             color = "#a5d6a7" if i == 0 else ("#ef9a9a" if i == len(path) - 1 else "#ffd54f")
+            label = f"{code}  {ap.get('city', '')}"
             m = self.map_widget.set_marker(
-                ap["lat"], ap["lon"], text=code,
-                marker_color_circle=color, marker_color_outside="#333")
+                ap["lat"], ap["lon"], text=label,
+                marker_color_circle=color,
+                marker_color_outside="#222",
+                command=lambda mk, c=code: self._on_marker_click(c),
+            )
             self._path_markers.append(m)
 
         # Tabla de vértices
@@ -277,6 +241,5 @@ class Tab5Mapa:
         self.route_status.config(text="")
 
     def draw_external_path(self, path, dist_km):
-        """Llamado desde Tab4 para dibujar la ruta externamente."""
         if path and self._map_ready:
             self._render_path(path, dist_km, path[0], path[-1])
