@@ -1,5 +1,6 @@
 # Laboratorio 2 — Estructura de Datos II
 ## Universidad del Norte — Grafo de Rutas Aéreas
+## Santiago Orozco, Keymer Perez y Juan Salcedo
 
 ### Descripción
 Aplicación de escritorio en Python que construye un grafo **simple, no dirigido y ponderado**
@@ -12,9 +13,11 @@ El peso de cada arista es la **distancia Haversine** (km) entre los aeropuertos 
 ### Estructura del proyecto
 
 ```
-lab2/
+
+LAB2EDD2/
 ├── main.py          # Punto de entrada, ventana principal y pestañas
 ├── graph.py         # Grafo y todos los algoritmos (sin librerías externas)
+├── tk_table.py      # Tabla scrollable con tk puro (sin ttk)
 ├── ui_tab1.py       # Pestaña 1: Conectividad (BFS)
 ├── ui_tab2.py       # Pestaña 2: Bipartitividad (BFS 2-coloring)
 ├── ui_tab3.py       # Pestaña 3: Árbol de Expansión Mínima (Kruskal + Union-Find)
@@ -53,10 +56,10 @@ python main.py
 ---
 
 ### Restricciones cumplidas
-- ✅ **Sin librerías externas** para conectividad, bipartitividad, MST ni caminos mínimos.
-- ✅ Todos los algoritmos implementados manualmente en `graph.py`.
-- ✅ Distancia entre coordenadas: fórmula **Haversine** implementada desde cero.
-- ✅ Código documentado con docstrings y comentarios en cada módulo.
+-  **Sin librerías externas** para conectividad, bipartitividad, MST ni caminos mínimos.
+-  Todos los algoritmos implementados manualmente en `graph.py`.
+-  Distancia entre coordenadas: fórmula **Haversine** implementada desde cero.
+-  Código documentado con docstrings y comentarios en cada módulo.
 
 ---
 
