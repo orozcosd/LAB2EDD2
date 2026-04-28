@@ -1,6 +1,7 @@
 """
 ui_tab3.py
 Pestaña 3: Árbol de Expansión Mínima (Kruskal).
+Documentado por Keymer Perez
 Si hay más de una componente, calcula el MST de cada una.
 """
 

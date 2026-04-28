@@ -1,6 +1,7 @@
 """
 ui_tab4.py
 Pestaña 4: Caminos mínimos — Dijkstra.
+Documentado por Keymer Perez y Juan Salcedo
 """
 
 import tkinter as tk
