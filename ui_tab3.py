@@ -47,7 +47,7 @@ class Tab3MST:
 
         btn = tk.Button(
             parent,
-            text="▶  Calcular MST(s)",
+            text="Calcular MST(s)",
             font=FONT_MONO,
             bg=ACCENT,
             fg="#0f1117",
@@ -122,7 +122,7 @@ class Tab3MST:
         self.parent.after(0, lambda: self._show(results))
 
     def _show(self, results):
-        self.progress_lbl.config(text=f"✔  MST calculado para {len(results)} componente(s).", fg=GREEN)
+        self.progress_lbl.config(text=f"MST calculado para {len(results)} componente(s).", fg=GREEN)
         self._mst_data = results
         self.tree_sum.delete(*self.tree_sum.get_children())
         for i, (comp, weight, edges) in enumerate(results, 1):

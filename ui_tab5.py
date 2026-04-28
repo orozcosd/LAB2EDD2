@@ -72,11 +72,11 @@ class Tab5Mapa:
         tk.Label(dst_f, textvariable=self.dst_var,
                  font=("Courier New", 11, "bold"), fg=YELLOW, bg=BG3).pack(side="left")
 
-        tk.Button(left, text="🗺  Dibujar Ruta Mínima", font=FONT_MONO,
+        tk.Button(left, text="Dibujar Ruta Mínima", font=FONT_MONO,
                   bg=ACCENT, fg="#0f1117", relief="flat", padx=10, pady=6,
                   cursor="hand2", command=self._draw_route).pack(fill="x", padx=12, pady=(10, 4))
 
-        tk.Button(left, text="✕  Limpiar Ruta", font=FONT_MONO,
+        tk.Button(left, text="Limpiar Ruta", font=FONT_MONO,
                   bg=BG3, fg=RED, relief="flat", padx=10, pady=4,
                   cursor="hand2", command=self._clear_route).pack(fill="x", padx=12)
 
@@ -123,7 +123,7 @@ class Tab5Mapa:
         right.pack(side="right", fill="both", expand=True)
 
         self.loading_lbl = tk.Label(right,
-                                    text="🗺  Cargando mapa… (requiere conexión a internet)",
+                                    text="Cargando mapa… (requiere conexión a internet)",
                                     font=("Courier New", 12), fg=ACCENT, bg="#111")
         self.loading_lbl.place(relx=0.5, rely=0.5, anchor="center")
 
@@ -162,12 +162,12 @@ class Tab5Mapa:
         src = self.src_var.get().strip().upper()
         dst = self.dst_var.get().strip().upper()
         if not src or not dst:
-            self.route_status.config(text="⚠ Selecciona origen y destino.", fg=RED)
+            self.route_status.config(text="Selecciona origen y destino.", fg=RED)
             return
         if src not in self.graph.airports or dst not in self.graph.airports:
-            self.route_status.config(text="⚠ Código no válido.", fg=RED)
+            self.route_status.config(text="Código no válido.", fg=RED)
             return
-        self.route_status.config(text="⏳ Calculando camino mínimo…", fg=YELLOW)
+        self.route_status.config(text="Calculando camino mínimo…", fg=YELLOW)
         threading.Thread(target=self._compute_route, args=(src, dst), daemon=True).start()
 
     def _compute_route(self, src, dst):
@@ -180,7 +180,7 @@ class Tab5Mapa:
         self._clear_route()
         import math
         if not path or dist_km == math.inf:
-            self.route_status.config(text=f"✘ No hay camino entre {src} y {dst}.", fg=RED)
+            self.route_status.config(text=f"No hay camino entre {src} y {dst}.", fg=RED)
             return
 
         coords = [(self.graph.airports[c]["lat"], self.graph.airports[c]["lon"]) for c in path]

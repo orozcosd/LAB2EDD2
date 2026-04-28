@@ -58,7 +58,7 @@ class Tab4CaminosMinimos:
                                      fg=GREEN, bg=BG2)
         self.src_info_lbl.grid(row=0, column=2, padx=10, sticky="w")
 
-        tk.Button(sel, text="▶  Ejecutar Dijkstra", font=FONT_MONO,
+        tk.Button(sel, text="Ejecutar Dijkstra", font=FONT_MONO,
                   bg=ACCENT, fg="#0f1117", activebackground="#b2dfdb",
                   relief="flat", padx=12, pady=6, cursor="hand2",
                   command=self._run_dijkstra).grid(row=0, column=3, padx=18, pady=6)
@@ -134,7 +134,7 @@ class Tab4CaminosMinimos:
         code = self.src_var.get().strip().upper()
         info = self.graph.airports.get(code)
         if info:
-            self.src_info_lbl.config(text=f"✔ {info['name']}, {info['city']}", fg=GREEN)
+            self.src_info_lbl.config(text=f"{info['name']}, {info['city']}", fg=GREEN)
         else:
             self.src_info_lbl.config(text="")
 
@@ -142,7 +142,7 @@ class Tab4CaminosMinimos:
         code = self.dst_var.get().strip().upper()
         info = self.graph.airports.get(code)
         if info:
-            self.dst_info_lbl.config(text=f"✔ {info['name']}, {info['city']}", fg=YELLOW)
+            self.dst_info_lbl.config(text=f"{info['name']}, {info['city']}", fg=YELLOW)
         else:
             self.dst_info_lbl.config(text="")
 
@@ -150,12 +150,12 @@ class Tab4CaminosMinimos:
     def _run_dijkstra(self):
         code = self.src_var.get().strip().upper()
         if not code:
-            self.status_lbl.config(text="⚠  Ingresa el código del aeropuerto origen.", fg=RED)
+            self.status_lbl.config(text="Ingresa el código del aeropuerto origen.", fg=RED)
             return
         if code not in self.graph.airports:
-            self.status_lbl.config(text=f"⚠  Código '{code}' no encontrado.", fg=RED)
+            self.status_lbl.config(text=f"Código '{code}' no encontrado.", fg=RED)
             return
-        self.status_lbl.config(text=f"⏳  Ejecutando Dijkstra desde {code}…", fg=YELLOW)
+        self.status_lbl.config(text=f"Ejecutando Dijkstra desde {code}…", fg=YELLOW)
         self.tree.delete(*self.tree.get_children())
         self.origin_detail.config(text="")
         threading.Thread(target=self._compute, args=(code,), daemon=True).start()
@@ -188,7 +188,7 @@ class Tab4CaminosMinimos:
 
         reachable = sum(1 for d in dist.values() if d < math.inf) - 1
         self.status_lbl.config(
-            text=f"✔  Dijkstra completo. {reachable} aeropuertos alcanzables desde {code}.",
+            text=f"Dijkstra completo. {reachable} aeropuertos alcanzables desde {code}.",
             fg=GREEN)
 
     # ── Ruta al mapa ─────────────────────────────────────────────────────
@@ -196,13 +196,13 @@ class Tab4CaminosMinimos:
         src = self.src_var.get().strip().upper()
         dst = self.dst_var.get().strip().upper()
         if not src or not dst:
-            self.status_lbl.config(text="⚠  Ingresa origen y destino.", fg=RED)
+            self.status_lbl.config(text="Ingresa origen y destino.", fg=RED)
             return
         if src not in self.graph.airports or dst not in self.graph.airports:
-            self.status_lbl.config(text="⚠  Código de aeropuerto no válido.", fg=RED)
+            self.status_lbl.config(text="Código de aeropuerto no válido.", fg=RED)
             return
         if src not in self._dijkstra_cache:
-            self.status_lbl.config(text=f"⏳  Calculando ruta {src}→{dst}…", fg=YELLOW)
+            self.status_lbl.config(text=f"Calculando ruta {src}→{dst}…", fg=YELLOW)
             threading.Thread(target=self._compute_and_map, args=(src, dst),
                              daemon=True).start()
         else:
@@ -218,11 +218,11 @@ class Tab4CaminosMinimos:
         dist, prev = self._dijkstra_cache[src]
         path = self.graph.reconstruct_path(prev, src, dst)
         if not path:
-            self.status_lbl.config(text=f"✘  No hay camino entre {src} y {dst}.", fg=RED)
+            self.status_lbl.config(text=f"No hay camino entre {src} y {dst}.", fg=RED)
             return
         d = dist[dst]
         self.status_lbl.config(
-            text=f"✔  Ruta {src}→{dst}: {len(path)-1} salto(s), {d:,.2f} km", fg=GREEN)
+            text=f"Ruta {src}→{dst}: {len(path)-1} salto(s), {d:,.2f} km", fg=GREEN)
         self._last_path = path
         self._last_dist = d
 

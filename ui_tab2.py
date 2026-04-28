@@ -120,7 +120,7 @@ class Tab2Bipartito:
         if is_bip:
             grp_a = sum(1 for v in color.values() if v == 0)
             grp_b = sum(1 for v in color.values() if v == 1)
-            self.result_lbl.config(text="✔  ES BIPARTITO", fg=GREEN)
+            self.result_lbl.config(text="ES BIPARTITO", fg=GREEN)
             self.detail_lbl.config(
                 text="Los aeropuertos se pueden dividir en 2 grupos sin aristas entre nodos del mismo grupo.",
                 fg=GREEN)
@@ -129,7 +129,7 @@ class Tab2Bipartito:
             self.box_b._lbl.config(text=str(grp_b), fg="#ef9a9a")
             self.explain_result.config(text="", fg="#888")
         else:
-            self.result_lbl.config(text="✘  NO ES BIPARTITO", fg=RED)
+            self.result_lbl.config(text="NO ES BIPARTITO", fg=RED)
             self.detail_lbl.config(
                 text="Se encontró un ciclo de longitud IMPAR durante el BFS 2-coloring.",
                 fg=RED)
