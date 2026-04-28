@@ -1,7 +1,7 @@
 """
 ui_tab1.py
 Pestaña 1: Conectividad del grafo.
-Docuemntado por: Santiago Orozco
+Docuemntado por Santiago Orozco
 
 Este archivo maneja la primera pestaña de la aplicación.
 Su función es responder la pregunta:

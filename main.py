@@ -2,7 +2,7 @@
 LABORATORIO 2 - Estructura de Datos II
 Universidad del Norte
 Grafo de rutas aéreas mundiales
-Sección documentada por: Santiago Orozco
+Sección documentada por Santiago Orozco
 
 Este archivo es el PUNTO DE ENTRADA del programa. Es el primero que
 se ejecuta y su trabajo es:

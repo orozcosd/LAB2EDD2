@@ -1,6 +1,6 @@
 """
 graph.py
-Documentado por: Santiago Orozco
+Documentado por Santiago Orozco
 Módulo principal del grafo de aeropuertos.
 
 Este archivo es el CEREBRO del programa. Aquí se construye el grafo
